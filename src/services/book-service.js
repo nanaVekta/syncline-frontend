@@ -39,6 +39,10 @@ class BookService {
     updateBook(book, id) {
         return axios.put(API_URL + id, book, { headers: authHeader() });
     }
+
+    searchBook(title) {
+        return axios.get(API_URL + 'search/' + title);
+    }
 }
 
 export default new BookService();

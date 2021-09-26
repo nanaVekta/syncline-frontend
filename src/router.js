@@ -7,6 +7,7 @@ const Dashboard = () => import("./components/Dashboard.vue");
 const AddBook = () => import("./components/AddBook.vue");
 const Book = () => import("./components/Book.vue");
 const UpdateBook = () => import("./components/UpdateBook.vue");
+const Cart = () => import("./components/Cart.vue");
 
 const routes = [
     {
@@ -45,6 +46,12 @@ const routes = [
         path: "/book/edit/:id",
         component: UpdateBook,
         name: "update-book",
+    },
+
+    {
+        path: "/cart",
+        component: Cart,
+        name: "cart",
     }
 ];
 
@@ -54,7 +61,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login', '/register', '/home'];
+    const publicPages = ['/login', '/register', '/home', '/cart'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = localStorage.getItem('user');
   

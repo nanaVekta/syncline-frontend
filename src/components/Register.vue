@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center mt-4">
             <div class="col-md-6 col-md-offset-3">
                 <div class="card">
                     <div class="card-header">
@@ -93,17 +93,7 @@ export default {
       schema,
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-  },
-  mounted() {
-    //TODO: check redirect to dashboard or cart
-    // if (this.loggedIn) {
-    //   this.$router.push("/profile");
-    // }
-  },
+
   methods: {
     handleRegister(user) {
       this.message = "";

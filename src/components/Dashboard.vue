@@ -15,7 +15,7 @@
         </div>
         <div class="row mt-5" v-if="hasData">
             <div class="col-md-3" v-for="book in books" :key="book._id">
-              <div class="card">
+              <div class="card shadow">
                 <img class="card-img-top"  v-bind:src="'http://localhost:8080/' + book.image" alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title">{{book.title}}</h5>

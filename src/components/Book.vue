@@ -8,9 +8,10 @@
                     <h5 class="card-title">{{book.title}}</h5>
                     <p class="card-text">Quantity: {{book.quantity}}</p>
                     <p>{{book.description}}</p>  
-                    <router-link :to="'/book/edit/' + book._id">
+                    <router-link v-if="isAdmin" :to="'/book/edit/' + book._id">
                     <button class="btn btn-primary">Edit</button>    
-                    </router-link>          
+                    </router-link>    
+                    <button v-if="!isAdmin" class="btn btn-warning">Add To Cart</button>      
                   </div>
               </div>
             </div>
@@ -31,7 +32,20 @@ export default {
             hasData : false
         }
     },
+    computed: {
+        currentUser() {
+            return this.$store.state.auth.user;
+        },
+        isUserAdmin() {
+            if (this.currentUser && this.currentUser['roles']) {
+                return this.currentUser['roles'].includes('ROLE_ADMIN');
+            }
+
+            return false;
+        }
+    },
     mounted() {
+        
         BookService.getBook(this.bookId)
         .then(response => {
             const data = response.data;
