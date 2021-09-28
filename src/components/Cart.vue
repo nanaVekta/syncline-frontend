@@ -38,44 +38,108 @@
  </template>
 
 <script>
+    import SaleService from '../services/sale-service'
 
-export default {
-    name: 'Cart',
-     data() {
-        return {
-        books: [],
-        hasData: false,
-        errorData: 'There are no items added to cart'
-        }
-    },
-
-    mounted() {
-        if (localStorage.getItem('slCart')) {
-            try {
-                this.books = JSON.parse(localStorage.getItem('slCart'));
-                this.hasData = true;
-            } catch(e) {
-                this.hasData = false;
+    export default {
+        name: 'Cart',
+        data() {
+            return {
+                books: [],
+                hasData: false,
+                errorData: 'There are no items added to cart',
+                success: false,
             }
-        }
-        else {
-            this.hasData = false;
-        }
-    },
-    methods: {
-        clearCart() {
-            localStorage.removeItem('slCart');
-            this.books = [];
-            this.hasData = false;
         },
-        removeBook(id) {
-            this.books = this.books.filter(book => book._id !== id);
-            localStorage.setItem('slCart', JSON.stringify(this.books));
-            if (this.books.length === 0) {
+        computed: {
+            currentUser() {
+                return this.$store.state.auth.user;
+            },
+            
+        },
+        mounted() {
+            if (localStorage.getItem('slCart')) {
+                try {
+                    this.books = JSON.parse(localStorage.getItem('slCart'));
+                    this.hasData = true;
+                } catch(e) {
+                    this.hasData = false;
+                }
+            }
+            else {
                 this.hasData = false;
             }
         },
         
+        methods: {
+            clearCart() {
+                localStorage.removeItem('slCart');
+                this.books = [];
+                this.hasData = false;
+            },
+            removeBook(id) {
+                this.books = this.books.filter(book => book._id !== id);
+                localStorage.setItem('slCart', JSON.stringify(this.books));
+                if (this.books.length === 0) {
+                    this.hasData = false;
+                }
+            },
+
+            checkout() {
+                if (this.books.length === 0) {
+                    this.$swal({
+                        title: 'Error',
+                        text: 'There are no items added to cart',
+                        type: 'error'
+                    });
+                }
+                else {
+                    this.$swal({
+                        title: 'Enter amount to checkout',
+                        input: 'number',
+                        inputAttributes: {
+                            autocapitalize: 'off'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Checkout',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (amount) => {
+                            for(let i = 0; i < this.books.length; i ++){
+                                let book = this.books[i];
+                                let sale = {
+                                    bookId: book._id,
+                                    amount: amount,
+                                    userId: this.currentUser.id
+                                };
+                                SaleService.createSale(sale)
+                                .then(response => {
+                                    const data = response.data;
+                                    const lastBook = this.books.length - 1;
+                                    if(data.message == 'success' && i == lastBook){
+                                        this.$swal({
+                                            title: 'Checkout successfull',
+                                            type: 'success',
+                                            showConfirmButton: false,
+
+                                        });
+                                        this.clearCart();
+                                    }
+                                    else {
+                                        if(i == lastBook){
+                                            this.$swal({
+                                                title: 'Checkout failed',
+                                                type: 'error',
+                                                showConfirmButton: false,
+                                            });
+                                        }
+                                    }
+                                })
+                            }
+                            
+                        },
+                        })
+                }
+            }
+            
+        }
     }
-}
 </script>

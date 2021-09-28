@@ -14,22 +14,30 @@
             </div>
         </div>
         <div class="row mt-5" v-if="hasData">
-            <div class="col-md-3" v-for="book in books" :key="book._id">
+            <div class="col-md-4" v-for="book in books" :key="book._id">
+
               <div class="card shadow">
-                <img class="card-img-top"  v-bind:src="'http://localhost:8080/' + book.image" alt="Card image cap">
                   <div class="card-body">
-                    <h5 class="card-title">{{book.title}}</h5>
-                    <p class="card-text">Quantity: {{book.quantity}}</p>
                     <div class="row">
-                      <div class="col-sm-6">
-                        <router-link :to="'/book/' + book._id">
-                          <button class="btn btn-primary">View</button>
-                        </router-link>
+                      <div class="col-md-4">
+                        <img class="img-fluid rounded"  v-bind:src="'http://localhost:8080/' + book.image" alt="Card image cap">
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-md-8">
+                        <h5 class="card-title">{{book.title}}</h5>
+                        <p class="card-text">{{book.quantity}} left</p>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <router-link :to="'/book/' + book._id">
+                              <button class="btn btn-primary">View</button>
+                            </router-link>
+                          </div>
+                          <div class="col-sm-6">
                          <button class="btn btn-danger" @click="showAlert(book._id)">Delete</button>
+                          </div>
+                        </div>  
                       </div>
-                    </div>                    
+                    </div>
+                                      
                   </div>
               </div>
             </div>

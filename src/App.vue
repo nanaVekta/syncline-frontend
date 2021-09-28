@@ -1,17 +1,15 @@
 <template>
-  <nav class="navbar navbar-expand navbar-dark bg-primary">
-      <a href="/" class="navbar-brand">SynLine</a>
+  <nav class="navbar navbar-expand navbar-light bg-light shadow">
+      <a href="/home" class="navbar-brand">SynLine</a>
       <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link">
-            <font-awesome-icon icon="home" /> Home
-          </router-link>
-        </li>
+        
         <li v-if="showAdminBoard" class="nav-item">
           <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
         </li>
-        <li v-if="showUserBoard" class="nav-item">
-          <router-link to="/cart" class="nav-link">Cart</router-link>
+        <li v-if="!showAdminBoard" class="nav-item">
+          <router-link to="/cart" class="nav-link">
+            <font-awesome-icon icon="shopping-basket" /> Cart
+          </router-link>
         </li>
 
       </div>
@@ -19,26 +17,36 @@
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
           <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" /> Sign Up
+          <button class="btn btn-primary">
+            Sign Up
+          </button>
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">
-            <font-awesome-icon icon="sign-in-alt" /> Login
+          <button class="btn btn-outline-primary">
+             Login
+          </button>
           </router-link>
         </li>
       </div>
 
       <div v-if="currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link">
+          <a v-if="!showAdminBoard" href="/user/sales" class="nav-link">
+            <font-awesome-icon icon="user" />
+            {{ currentUser.name }}
+          </a>
+          <a v-if="showAdminBoard" href="/sales" class="nav-link">
             <font-awesome-icon icon="user" />
             {{ currentUser.name }}
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" @click.prevent="logOut">
-            <font-awesome-icon icon="sign-out-alt" /> LogOut
+            <button class="btn btn-danger">
+               Log Out
+            </button>
           </a>
         </li>
       </div>

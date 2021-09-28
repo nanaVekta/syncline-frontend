@@ -8,6 +8,8 @@ const AddBook = () => import("./components/AddBook.vue");
 const Book = () => import("./components/Book.vue");
 const UpdateBook = () => import("./components/UpdateBook.vue");
 const Cart = () => import("./components/Cart.vue");
+const UserSales = () => import("./components/UserSales.vue");
+const Sales = () => import("./components/Sales.vue");
 
 const routes = [
     {
@@ -52,7 +54,18 @@ const routes = [
         path: "/cart",
         component: Cart,
         name: "cart",
+    },
+    {
+        path: "/user/sales",
+        component: UserSales,
+        name: "user-sales",
+    },
+    {
+        path: "/sales",
+        component: Sales,
+        name: "sales",
     }
+
 ];
 
 const router = createRouter({
@@ -61,7 +74,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login', '/register', '/home', '/cart'];
+    const publicPages = ['/login', '/register', '/home', '/book/:id'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = localStorage.getItem('user');
   
